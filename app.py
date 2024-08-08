@@ -1,11 +1,15 @@
 from flask import Flask, request, jsonify
 import google.generativeai as genai
 import os
+from dotenv import load_dotenv
+
+# .env 파일에서 환경 변수를 로드
+load_dotenv()
 
 app = Flask(__name__)
 
 # 환경 변수에서 API 키를 불러옴
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyA3d9E2yVeGTo9Uv5VE0xkKbCgf4rfDN90")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 모델 설정
@@ -43,7 +47,6 @@ def generate_card_text_api():
         card_text = generate_card_text(target, sentiment, text_type)
         img_url = "https://example.com/image.jpg" if is_image else ""
 
-        print(card_text)
         return jsonify({"phrase": card_text, "imgURL": img_url})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
